@@ -1,0 +1,12 @@
+{
+  "name": "teofeta_stats",
+  "version": "1.0.0",
+  "description": "A script to retrieve a Twitch's channel stats",
+  "main": "index.js",
+  "author": "Dj Teofeta",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "twitch": "^4.2.6"
+  }
+}
