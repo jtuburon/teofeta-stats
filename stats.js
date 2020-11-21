@@ -2,13 +2,15 @@ const dotenv = require('dotenv');
 const { ApiClient } = require('twitch');
 const { ClientCredentialsAuthProvider } = require('twitch-auth');
 const fs = require('fs');
+const path = require('path');
 const { setIntervalAsync } = require('set-interval-async/dynamic');
 
-const OUTPUT_PATH = './output';
-const FOLLOWERS_LIST_PATH = `./${OUTPUT_PATH}/followers_list.txt`;
-const FOLLOWERS_COUNT_PATH = `./${OUTPUT_PATH}/followers_count.txt`;
-const VIEWS_COUNT_PATH = `./${OUTPUT_PATH}/views_count.txt`;
-const ONLINE_COUNT_PATH = `./${OUTPUT_PATH}/online_count.txt`;
+const OUTPUT_PATH = path.join(__dirname, 'output');
+
+const FOLLOWERS_LIST_PATH = path.join(OUTPUT_PATH, 'followers_list.txt');
+const FOLLOWERS_COUNT_PATH = path.join(OUTPUT_PATH, 'followers_count.txt');
+const VIEWS_COUNT_PATH = path.join(OUTPUT_PATH, 'views_count.txt');
+const ONLINE_COUNT_PATH = path.join(OUTPUT_PATH, 'online_count.txt');
 
 if (!fs.existsSync(OUTPUT_PATH)) {
   fs.mkdirSync(OUTPUT_PATH);
