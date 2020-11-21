@@ -2,6 +2,7 @@ const dotenv = require('dotenv');
 const { ApiClient } = require('twitch');
 const { ClientCredentialsAuthProvider } = require('twitch-auth');
 const fs = require('fs');
+const { setIntervalAsync } = require('set-interval-async/dynamic');
 
 const OUTPUT_PATH = './output';
 const FOLLOWERS_LIST_PATH = `./${OUTPUT_PATH}/followers_list.txt`;
@@ -15,7 +16,14 @@ if (!fs.existsSync(OUTPUT_PATH)) {
 
 dotenv.config();
 
-const { CLIENT_ID, CLIENT_SECRET, USER_ID, ENABLE_FOLLOWS_LIST, FOLLOWERS_LIST_SEPARATOR } = process.env;
+const {
+  CLIENT_ID,
+  CLIENT_SECRET,
+  USER_ID,
+  ENABLE_FOLLOWS_LIST,
+  FOLLOWERS_LIST_SEPARATOR,
+  DELAY_IN_SECONDS,
+} = process.env;
 
 const authProvider = new ClientCredentialsAuthProvider(CLIENT_ID, CLIENT_SECRET);
 const apiClient = new ApiClient({ authProvider });
@@ -32,7 +40,6 @@ const getFollowers = async () => {
 
   if (ENABLE_FOLLOWS_LIST) {
     const followersList = await _follows.getAll();
-    console.log(followersList);
     const followersNameList = followersList.map((f) => f.userDisplayName);
     return { followersCount, followersList: followersNameList };
   }
@@ -51,6 +58,7 @@ const reportData = (stats) => {
       stats.followers.followersList.join(FOLLOWERS_LIST_SEPARATOR) + FOLLOWERS_LIST_SEPARATOR,
     );
 
+  console.log('');
   console.log(`Viewers Count: ${stats.viewsCount}`);
   console.log(`Followers Count: ${stats.followers.followersCount}`);
   console.log(`Online Count: ${stats.onlineCount}`);
@@ -66,4 +74,8 @@ const main = async () => {
   reportData(stats);
 };
 
-main();
+if (DELAY_IN_SECONDS) {
+  setIntervalAsync(main, DELAY_IN_SECONDS * 1000);
+} else {
+  main();
+}
